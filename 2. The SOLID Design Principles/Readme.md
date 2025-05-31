@@ -2,7 +2,7 @@
  
 * 0:00:00    -  Introduction.
 * 0:07:04    -  Overview.
-## 0:07:57    -  $ Single Responsibility Principle. $
+## 0:07:57    -  $Single Responsibility Principle.$
 
 The Single Responsibility Principle (SRP) is the first of the five SOLID design principles. It states that a class should have only one reason to change. In simpler terms, each class should have a single, well-defined responsibility.
 
@@ -86,7 +86,7 @@ The ReportContent class is solely responsible for generating the report's textua
 The ReportPrinter class is solely responsible for handling different ways of outputting (printing) the report. If we add new output methods (e.g., email, cloud storage), only this class needs modification.
 This separation of concerns makes the code more modular, easier to understand, test, and maintain. Each class has one reason to change.
 
-## 0:15:28    - $ Open-Closed Principle. $
+## 0:15:28    - $Open-Closed Principle.$
 
 The Open-Closed Principle (OCP) is the second of the five SOLID design principles. It states that software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification.
 
@@ -213,7 +213,7 @@ Improved Maintainability: Code is easier to understand and manage because respon
 Better Testability: Individual components (formatters) can be tested in isolation.
 By following the Open-Closed Principle, you build systems that are more adaptable to change, which is crucial in the ever-evolving world of software development.
 
-## 0:32:58    - $ Liskov Substitution Principle. $
+## 0:32:58    - $Liskov Substitution Principle.$
 
 The Liskov Substitution Principle (LSP) is the third of the five SOLID design principles. It states that:
 
