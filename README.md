@@ -8,17 +8,17 @@
 
 Why it's crucial for you: These are not just design patterns; they are fundamental principles that underpin good software design. For an AI developer, especially when dealing with complex models, data pipelines, and evolving requirements, adhering to SOLID principles will lead to more robust, testable, and adaptable codebases.
 
-<b>$I$. Single Responsibility Principle (SRP):</b> Essential for managing complexity in AI components (e.g., a data preprocessing module should only preprocess data, not also handle model training).
+<b> I. Single Responsibility Principle (SRP):</b> Essential for managing complexity in AI components (e.g., a data preprocessing module should only preprocess data, not also handle model training).
 
-<b>$II$.Open-Closed Principle (OCP):</b> Crucial for extending functionalities without modifying existing, tested code, which is common in AI (e.g., adding new model types or data sources).
+<b> II. Open-Closed Principle (OCP):</b> Crucial for extending functionalities without modifying existing, tested code, which is common in AI (e.g., adding new model types or data sources).
 
-<b>$III$. Liskov Substitution Principle (LSP):</b> Important for ensuring that subclasses behave as expected, especially when dealing with different implementations of a common interface (e.g., different optimization algorithms).
+<b> III. Liskov Substitution Principle (LSP):</b> Important for ensuring that subclasses behave as expected, especially when dealing with different implementations of a common interface (e.g., different optimization algorithms).
 
- <b>$IV$. Interface Segregation Principle (ISP):</b> Helps in creating lean, specific interfaces, preventing clients from depending on methods they don't use, valuable in large AI systems with many interacting components.
+ <b> IV. Interface Segregation Principle (ISP):</b> Helps in creating lean, specific interfaces, preventing clients from depending on methods they don't use, valuable in large AI systems with many interacting components.
 
-<b> $V$. Dependency Inversion Principle (DIP):</b> Promotes loose coupling, making your AI components more modular and easier to test in isolation (e.g., depending on abstractions for data access rather than concrete implementations).
+<b> V. Dependency Inversion Principle (DIP):</b> Promotes loose coupling, making your AI components more modular and easier to test in isolation (e.g., depending on abstractions for data access rather than concrete implementations).
 
-# High Priority: Common and Highly Applicable Patterns
+# Hisgh Priority: Common and Highly Applicable Patterns
 
 - ## $FACTORIES$
 
