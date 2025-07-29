@@ -2,7 +2,7 @@
  
 * 0:00:00    -  Introduction.
 * 0:07:04    -  Overview.
-## 0:07:57    -  $ Single Responsibility Principle. $
+## 0:07:57    -  $Single Responsibility Principle.$
 
 The Single Responsibility Principle (SRP) is the first of the five SOLID design principles. It states that a class should have only one reason to change. In simpler terms, each class should have a single, well-defined responsibility.
 
@@ -86,7 +86,7 @@ The ReportContent class is solely responsible for generating the report's textua
 The ReportPrinter class is solely responsible for handling different ways of outputting (printing) the report. If we add new output methods (e.g., email, cloud storage), only this class needs modification.
 This separation of concerns makes the code more modular, easier to understand, test, and maintain. Each class has one reason to change.
 
-## 0:15:28    - $ Open-Closed Principle. $
+## 0:15:28    - $Open-Closed Principle.$
 
 The Open-Closed Principle (OCP) is the second of the five SOLID design principles. It states that software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification.
 
@@ -213,7 +213,7 @@ Improved Maintainability: Code is easier to understand and manage because respon
 Better Testability: Individual components (formatters) can be tested in isolation.
 By following the Open-Closed Principle, you build systems that are more adaptable to change, which is crucial in the ever-evolving world of software development.
 
-## 0:32:58    - $ Liskov Substitution Principle. $
+## 0:32:58    - $Liskov Substitution Principle.$
 
 The Liskov Substitution Principle (LSP) is the third of the five SOLID design principles. It states that:
 
@@ -612,5 +612,151 @@ Easier Maintenance: Smaller interfaces are easier to understand, implement, and 
 Improved Testability: You can test specific capabilities of a class in isolation without worrying about unrelated methods.
 By applying the Interface Segregation Principle, you design systems with higher cohesion and lower coupling, leading to more robust and adaptable software.
 
-* 0:50:23    -  Dependency Inversion Principle.
-* 1:02:54    -  Summary.
+# 0:50:23    -  $Dependency Inversion Principle.$
+
+The Dependency Inversion Principle (DIP) is one of the five SOLID principles of object-oriented design. It states that:
+
+High-level modules should not depend on low-level modules. Both should depend on abstractions.
+Abstractions should not depend on details. Details should depend on abstractions.
+
+<b>`In simpler terms, DIP encourages you to design your software in such a way that the most important parts of your application (high-level modules, which define core business logic) do not directly rely on the concrete implementations of less important parts (low-level modules, which handle details like data storage, network communication, etc.). Instead, both should rely on abstract interfaces or protocols.`</b>
+
+This "inversion" refers to the traditional dependency flow. Typically, high-level modules might directly call low-level modules. DIP inverts this, making both depend on an abstraction, effectively decoupling them.
+
+Why is DIP important?
+Loose Coupling: Reduces the direct dependencies between components, making your system more flexible and easier to change.
+Testability: Allows you to easily swap out concrete implementations with mock objects for testing purposes, as your high-level modules depend on abstractions, not specific implementations.
+Maintainability: Changes in low-level modules are less likely to break high-level modules, as long as the abstraction remains consistent.
+Extensibility: Makes it easier to introduce new implementations of a low-level service without modifying the high-level code.
+Dependency Inversion Principle in Python (with Example)
+Python doesn't have explicit interfaces like Java or C#, but we can achieve abstraction using:
+
+Abstract Base Classes (ABCs) from the abc module: This is the most common and recommended way to define clear interfaces.
+Duck Typing: While not explicitly defining an interface, if an object "walks like a duck and quacks like a duck," it can be treated as a duck. This is Pythonic but less formal than ABCs for defining contracts.
+Let's illustrate DIP with an example: a simple notification system.
+
+Scenario without DIP (Bad Design):
+
+Imagine a Notifier that directly sends emails using a concrete EmailSender class.
+
+```Python
+
+# Low-level module (concrete implementation)
+class EmailSender:
+    def send_email(self, recipient: str, subject: str, message: str):
+        print(f"Sending email to {recipient}: Subject='{subject}', Message='{message}'")
+
+# High-level module (depends directly on low-level module)
+class Notifier:
+    def __init__(self):
+        self.email_sender = EmailSender() # Direct dependency
+
+    def send_notification(self, recipient: str, subject: str, message: str):
+        # Business logic for notification
+        if recipient and subject and message:
+            self.email_sender.send_email(recipient, subject, message)
+        else:
+            print("Invalid notification details.")
+
+# Usage
+notifier = Notifier()
+notifier.send_notification("user@example.com", "Welcome!", "Hello there!")
+```
+
+Problems with the above design:
+
+Tight Coupling: Notifier is directly dependent on EmailSender. If we want to switch to SMS or push notifications, we have to modify Notifier.
+Hard to Test: Testing Notifier requires an actual EmailSender, which might involve network calls or external services, making tests slow and brittle.
+Scenario with DIP (Good Design):
+
+We will introduce an abstraction (an Notifier interface) that both the Notifier (high-level) and the concrete communication channels (low-level like EmailSender, SMSSender) will depend on.
+
+```Python
+
+import abc
+
+# 1. Define the Abstraction (High-level and Low-level depend on this)
+class MessageSender(abc.ABC):
+    @abc.abstractmethod
+    def send_message(self, recipient: str, subject: str, message: str):
+        pass
+
+# 2. Low-level Modules (Details depend on Abstraction)
+class EmailSender(MessageSender):
+    def send_message(self, recipient: str, subject: str, message: str):
+        print(f"[Email] Sending to {recipient}: Subject='{subject}', Message='{message}'")
+
+class SMSSender(MessageSender):
+    def send_message(self, recipient: str, subject: str, message: str):
+        print(f"[SMS] Sending to {recipient}: Subject='{subject}', Message='{message}'")
+
+# 3. High-level Module (Depends on Abstraction)
+class Notifier:
+    # Notifier receives an abstraction (MessageSender), not a concrete implementation
+    def __init__(self, message_sender: MessageSender):
+        self.message_sender = message_sender
+
+    def send_notification(self, recipient: str, subject: str, message: str):
+        # Business logic for notification
+        if recipient and subject and message:
+            self.message_sender.send_message(recipient, subject, message)
+        else:
+            print("Invalid notification details.")
+
+# Usage with DIP:
+
+# Send notifications via Email
+email_sender = EmailSender()
+email_notifier = Notifier(email_sender)
+email_notifier.send_notification("alice@example.com", "Account Created", "Your account has been successfully created!")
+
+print("-" * 30)
+
+# Send notifications via SMS
+sms_sender = SMSSender()
+sms_notifier = Notifier(sms_sender)
+sms_notifier.send_notification("+1234567890", "OTP", "Your OTP is 123456.")
+
+print("-" * 30)
+
+# Example of easy extensibility: Add a new sender type
+class PushNotificationSender(MessageSender):
+    def send_message(self, recipient: str, subject: str, message: str):
+        print(f"[Push Notification] Sending to device {recipient}: Title='{subject}', Body='{message}'")
+
+push_sender = PushNotificationSender()
+push_notifier = Notifier(push_sender)
+push_notifier.send_notification("device_id_abc", "New Message", "You have a new message in your inbox.")
+
+print("-" * 30)
+
+# Example of Testability:
+# You can easily mock MessageSender for testing Notifier
+class MockMessageSender(MessageSender):
+    def __init__(self):
+        self.sent_messages = []
+
+    def send_message(self, recipient: str, subject: str, message: str):
+        self.sent_messages.append({"recipient": recipient, "subject": subject, "message": message})
+        print(f"[Mock] Message logged: {message}")
+
+mock_sender = MockMessageSender()
+test_notifier = Notifier(mock_sender)
+test_notifier.send_notification("test@example.com", "Test Subject", "Test Message")
+
+assert len(mock_sender.sent_messages) == 1
+assert mock_sender.sent_messages[0]["subject"] == "Test Subject"
+print(f"Mock messages sent: {mock_sender.sent_messages}")
+```
+Explanation of DIP in the Example:
+
+Abstraction (MessageSender): We defined an abstract base class MessageSender with an abstract method send_message. This acts as the contract or interface.
+Low-level Modules (Details Depend on Abstraction): EmailSender, SMSSender, and PushNotificationSender are concrete implementations of how a message can be sent. Crucially, they implement the MessageSender abstraction. They don't dictate the Notifier's behavior; they conform to the MessageSender contract.
+High-level Module (Depends on Abstraction): The Notifier class no longer creates an EmailSender directly. Instead, its constructor expects an object that implements MessageSender. It doesn't care how the message is sent, only that it can call send_message() on the provided object.
+
+Benefits Achieved:\
+Decoupling: Notifier is completely decoupled from the concrete sending mechanisms.
+Flexibility: You can switch between email, SMS, or push notifications simply by providing a different MessageSender implementation to Notifier at runtime.
+Testability: In the testing example, we provided a MockMessageSender which doesn't actually send anything but allows us to verify if Notifier correctly called send_message and with what arguments. This makes Notifier's tests isolated and fast.
+Extensibility: Adding a new notification channel (e.g., SlackSender) is straightforward: just create a new class that implements MessageSender, and Notifier will work with it without any changes.
+By applying the Dependency Inversion Principle, you build more robust, maintainable, and flexible software systems.
